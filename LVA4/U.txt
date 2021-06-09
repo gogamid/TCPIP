@@ -1,0 +1,34 @@
+TCPIP-Programmierung SoSe 2021 - Übungen - Peter Klingebiel
+TCP-Clients und UNIX-Socket-Clients und -Server
+-------------------------------------------------------------------------
+1. Schreiben Sie einen einfachen HTTP-Client (ähnlich wie in der letzten
+ Übung), der sich mit einem Webserver (z.B. tp.rz.hs-fulda.de) verbindet,
+ einen Request (z.B. /tp-date.php) schickt, auf die Antwort (Webseite)
+ des Server wartet und diese ausgibt.
+ Den Servernamen und den Request übergeben Sie in der Kommandozeile,
+ die Serverdaten ermitteln Sie mit der Funktion gethostbyname(), die
+ Servicedaten mit der Funktion getservbyname(). Mit den Informationen
+ initialisieren Sie die entsprechende Serverdatenstruktur.
+ Probieren Sie auch andere Server und Requests aus, machen Sie z.B.
+ eine Google-Abfrage.
+ 
+2. Nehmen Sie sich die Beispielprogramme der Vorlesung tp04-unserver.c
+ und tp04-unclient.c vor, kompilieren Sie diese und probieren Sie die
+ Programme aus. Sehen Sie sich den Socket im Verzeichnis /tmp an.
+ Was passiert, wenn Sie den Serverprozess abbrechen und danach den
+ Server erneut starten wollen?
+
+3. Schreiben Sie einen einfachen Unix-Socket-Server, der an einem Unix-
+ Socket auf Client-Verbindungen wartet, vom Client eine Nachricht liest,
+ diese auf der Standardausgabe ausgibt und eine Nachricht an den Client
+ zurückschickt. Als Pfadnamen für den Unix-Socket wählen Sie einen
+ dynamischen Namen, z.B. /tmp/un-sockPID, wobei PID die Prozess-Id des
+ Serverprozesses ist. Der Socketname wird nach Programmstart ausgegeben,
+ damit Clients über diesen eine Serververbindung herstellen können.
+
+4. Schreiben Sie einen einfachen Unix-Socket-Client, der sich mit dem
+ Unix-Socket-Server aus Aufgabe 3 verbindet. Den vom Server gezeigten
+ Socketnamen bekommt der Client über die Kommandozeile mitgeteilt.
+ Der Client schickt eine einfache Textnachricht, die z.B. die PID des
+ Clientprozesses enthält. Dann wartet er auf die Antwort vom Server
+ und gibt diese auf Standardausgabe aus.

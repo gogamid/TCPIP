@@ -1,0 +1,24 @@
+-------------------------------------------------------------------------
+1. Schreiben Sie ein Programm, das Sie mit einem Dateinamen als Parameter
+ aufrufen. Lesen Sie für die Datei die Dateiattribute mittels stat()
+ und geben Sie ausser dem Dateinamen die Attribute Größe in Bytes,
+ Besitzer-Id, Gruppen-Id und Modus aus. Ermitteln Sie auch, ob die
+ Datei eine reguläre Datei oder ein Verzeichnis ist und geben Sie
+ auch diese Information aus.
+2. Schreiben Sie ein Programm, das Sie mit einem Verzeichnisnamen als
+ Parameter aufrufen. Öffnen Sie das Verzeichnis mit opendir() und
+ durchlaufen Sie das Verzeichnis mit readdir(), wobei Sie jeweils den
+ Dateinamen und die Inodenummer ausgeben.
+ Hinweis: Der Einfachheit halber sollten Sie vor dem Durchlaufen des
+ Verzeichnisses in das Verzeichnis mit chdir(dirname) wechseln.
+3. Kombinieren Sie die Programme 1 und 2. Schreiben Sie ein Programm,
+ das Sie mit einem Verzeichnisnamen als Parameter aufrufen. Dann
+ durchlaufen Sie das Verzeichnis und geben jeweils den Dateinamen
+ und die Inodenummer aus. Weiterhin geben Sie für jede Datei auch
+ die Attribute Größe in Bytes, Besitzer-Id, Gruppen-Id und Modus aus.
+ Ermitteln Sie auch, ob die Datei eine reguläre Datei oder ein
+ Verzeichnis ist und geben Sie auch diese Information aus.
+4. Ideen zum Weiterentwickeln der Programme 1, 2, und 3:
+ - Geben Sie mehr Attribute der Dateien aus
+ - Durchlaufen Sie rekursiv den Dateibaum, indem Sie auch alle
+ Unterverzeichnisse durchlaufen.

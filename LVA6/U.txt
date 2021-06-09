@@ -1,0 +1,20 @@
+TCPIP-Programmierung SoSe 2021 – Übung 6 - Peter Klingebiel
+Einfache Multiserver
+-------------------------------------------------------------------------
+0. Sehen Sie sich den einfachen Multiserver tp05-multiserver.c an.
+ Bringen Sie diesen zum Laufen und testen ihn, z.B. mit netcat, ncat,
+ nc, telnet oder einem Browser.
+1. Verändern Sie den Multiserver tp05-multiserver.c so, dass er auch
+ auf UDP-Anfragen reagiert. Nehmen Sie dafür den Dienst CHARGEN/UDP
+ (auf dem Standardport 19) und implementieren Sie diesen auf Port 4719.
+ Der Dienst CHARGEN liefert in der Originalimplementierung einen
+ Endlosstrom von Zeichen. Für die Aufgabe reicht es aus, wenn der
+ Dienst nur die Gross- und Kleinbuchstaben einmal als Antwort sendet.
+
+2. Erweitern Sie den Multiserver aus der letzten Aufgabe um den Dienst
+ SYSTAT/TCP (Originalport 11) auf dem Port 4711. SYSTAT liefert eine
+ Liste der aktuell laufenden Prozesse (wie Kommando „ps –ef“) auf dem
+ Server. Nutzen Sie der Einfachheit halber die Funktion popen() für das
+ Erzeugen und Ausführen des Aufrufs von „ps –ef“. Mehr zu popen() finden
+ Sie in der entsprechenden Manualseite.
+ 

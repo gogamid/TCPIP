@@ -1,0 +1,35 @@
+1. Schreiben Sie ein Programm, das die folgenden Attribute / Daten aus
+ dem Prozesskontrollblock PCB von Unix/Linux ausliest und auf der
+ Standardausgabe ausgibt: Prozessid PID, Prozessid PPID des
+ Elternprozesses, Userid UID und Groupid GID, mit denen der Prozess /
+ das Programm läuft.
+2. Schreiben Sie ein Programm, das einen neuen Prozess (Kindprozess)
+ Mittels fork() erzeugt. Geben Sie vor fork() die PID des initialen
+ Prozesses auf stdout aus, geben Sie nach fork() den Rückgabewert von
+ fork() sowie die PIDs von Eltern- und Kindprozess aus. Der
+ Kindprozess soll mit dem Wert 0xAA terminieren, der Elternprozess
+ soll auf das Ende des Kindprozesses warten und den Rueckgabewert
+ des Kindprozesses ausgeben.
+3. Schreiben Sie ein Programm, das einen neuen Prozess (Kindprozess)
+ mittels fork() erzeugt. Geben Sie vor fork() die PID des initialen
+ Prozesses auf stdout aus, geben Sie nach fork() den Rueckgabewert von
+ fork() sowie die PIDs von Eltern- und Kindprozess aus. Der
+ Kindprozess soll dann das Kommando "ps -f" mittels exec(), z.B.
+ execl("/bin/ps", "ps", "-f", NULL) ausfuehren, der Elternprozess soll
+ auf das Ende des Kindprozesses warten und den Rückgabewert des
+ Kindprozesses ausgeben.
+4. Schreiben Sie ein Programm, in dem die beiden Signale SIGINT und
+ SIGUSR1 abgefangen und gezählt werden. SIGINT erzeugen Sie von der
+ Tastatur aus mit <Strg-C>, SIGUSR1 mit dem Kommando "kill -USR1 pid".
+ Daher geben Sie im Programm die PID des Prozesses aus. Nach fünf
+ Signalen soll das Programm terminieren. Hinweis: nach dem Einfangen
+ eines Signals im Signalhandler muss das Signal erneut abgefangen
+ werden.
+5. Schreiben Sie ein Programm, das einen Kindprozess erzeugt. Ermitteln
+ Sie die PIDs von Eltern- und Kindprozessen. Der Elternprozess fängt
+ Das Signal SIGUSR1 ab und zählt die Signale. Der Kindprozess schickt
+ dann drei Signale SIGUSR1 an den Elternprozess, der in einer Schleife
+ auf die das Eintreffen der drei Signale wartet. Nach dem Versenden
+ des dritten Signals terminiert das Kind und der Elternprozess
+ verlässt die Schleife, wartet auf das Ende des Kindes und gibt den
+ Exitwert des Kindes aus.

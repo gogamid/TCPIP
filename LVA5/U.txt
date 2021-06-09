@@ -1,0 +1,28 @@
+TCPIP-Programmierung SoSe 2021 - Übungen - Peter Klingebiel
+Portscanner, Signalbehandlung, UDP-Server und –Clients
+-------------------------------------------------------------------------
+1. Schreiben Sie einen einfachen Portscanner, der die Verfügbarkeit der
+ folgenden TCP-Dienste bei einem Host prüft: nonono, echo, daytime,
+ ftp-data, ftp, telnet, smtp, time, name, http, pop3 und https.
+ Den Hostnamen geben Sie über die Kommandozeile an. Überlegen Sie,
+ wie Sie beim TCP-Scan vorgehen müssen.
+ Hinweis: Nutzen Sie für das Programm die Funktionen gethostbyname()
+ und getservbyname() zur Ermittlung von IP-Adressen und Ports.
+ 
+2. Verändern Sie den Unix-Socket-Server aus der Übung 4 so, dass er
+ die Signale SIGINT, SIGQUIT und SIGTERM abfängt, den Unix-Socket im
+ Dateisystem entfernt und erst dann terminiert.
+
+3. Schreiben Sie einen einfachen Datagramm-Socket-Server, der in einer
+ Endlosschleife auf Nachrichten von Clients wartet, einen Zähler für
+ die empfangenen Nachrichten hochzählt, die Nachricht mit Zähler auf
+ der Standardausgabe ausgibt, eine Antwort mit dem Zähler erzeugt und
+ diese an den Client zurücksendet. Testen Sie den Server mit dem Client
+ aus Aufgabe 4 oder einem anderen Programm wie nc, ncat, netcat u.ä.
+
+4. Schreiben Sie einen einfachen Datagramm-Socket-Client, der in einer
+ Endlosschleife Nachrichten von der Standardeingabe liest und diese an
+ den Server aus Aufgabe 3 sendet. Mit der Eingabe von EOF (Ctrl-D) von
+ der Tastatur, d.h. wenn read() 0 oder fgets() NULL zurückgibt, wird
+ die Schleife verlassen, der Socket geschlossen und der Client beendet.
+ 

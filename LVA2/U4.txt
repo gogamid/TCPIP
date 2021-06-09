@@ -1,0 +1,20 @@
+1. Schreiben Sie ein Programm, das in einer Endlosschleife von der
+ Standardeingabe (fileno(stdin) oder 0) mit read() in einen Puffer
+ buf, z.B. der Größe 128, liest und diese Eingabezeile anschliessend
+ auf Standardausgabe (fileno(stdout) oder 1) schreibt. Bei EOF oder
+ der Eingabe der Zeile "eof" wird die Schleife verlassen und das
+ Programm beendet. Lesen Sie nur von der Standardeingabe, wenn Sie
+ zuvor mit select() geprüft haben, dass I/O von der Standardeingabe
+ auch anliegt.
+
+2. Schreiben Sie ein Programm in dem Sie eine Pipe mit pipe() erzeugen.
+ Anschliessend erzeugen Sie mit fork() einen Kindprozess. Im Kindprozess
+ schreiben Sie regelmäßig, z.B. alle 5 Sekunden, eine kurze Nachricht,
+ z.B. den String "hallo" mit einem Zähler auf die Pipe. Im Vaterprozess
+ prüfen Sie in einer Endlosschleife, ob I/O von der Standardeingabe
+ oder von der Pipe anliegt und lesen die Eingabe entsprechend ein und
+ geben diese auf Standardausgabe aus. Das Programm endet, wenn Sie den
+ String "eof" auf der Standardeingabe eingeben.
+3. Finden Sie heraus, ob Sie auch interrupt-gesteuertes I/O mit signal()
+ realisieren können. Wenn ja, wofür können Sie dieses einsetzen und
+ welche Einschränkungen müssen Sie in Kauf nehmen?

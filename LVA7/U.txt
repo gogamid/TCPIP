@@ -1,0 +1,22 @@
+TCPIP-Programmierung SoSe 2021 – Übungen - Peter Klingebiel
+Einfache R-Programme
+-------------------------------------------------------------------------
+0. Sehen Sie sich den rexec-Client tp06-rexec.c an und probieren ihn mit
+ dem rexec-Server tp06-rexecd.c aus. Führen Sie den Test lokal durch
+ und ändern Sie entsprechend die feste IP-Adresse des Server.
+1. Ändern Sie den rexec-Client so, dass Sie dem Client als 1. Parameter
+ in der Kommandozeile den Server (IP-Adresse und/oder Hostname) übergeben.
+ Das auszuführende Kommando und weitere Parameter übergeben Sie wie zuvor
+ ebenfalls in der Kommandozeile.
+ Beispielaufruf: rexec server command [parameter ...]
+2. Entwickeln Sie einen rcopy-Server und –Client, der so ähnlich wie das rcp-
+ Kommando arbeitet, und Textdateien vom Server auf den Client kopiert.
+ Der Server erwartet nach dem Verbindungsaufbau vom Client einen Dateinamen,
+ öffnet die Datei, liest sie ein und schickt sie an den Client.
+ Der Client bekommt den Server (IP-Adresse und/oder Hostname) und die zu
+ kopierende Datei in der Kommandozeile übergeben.
+ Beispielaufruf: rcopy server quelle ziel
+3. Ändern Sie Server und Client aus Aufgabe 3 so, dass Sie eine Datei in beide
+ Richtungen, also vom Server und auf den Server kopieren können.
+
+ 

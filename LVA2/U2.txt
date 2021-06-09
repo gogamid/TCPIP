@@ -1,0 +1,40 @@
+
+1. Schreiben Sie ein Programm, das in einer Endlosschleife von der
+ Standardeingabe (fileno(stdin) oder 0) mit read() in einen Puffer
+ buf, z.B. der Größe 128, liest und diese Eingabezeile anschliessend
+ auf Standardausgabe (fileno(stdout) oder 1) schreibt. Bei EOF oder
+ der Eingabe der Zeile "eof" wird die Schleife verlassen und das
+ Programm beendet.
+
+2. Schreiben Sie ein Programm, das eine Datei "datei.txt" mit open()
+ und dem Flag O_WRONLY|O_CREAT sowie dem Modus 0644 öffnet bzw.
+ neu erzeugt. In einer Endlosschleife lesen Sie dann von der
+ Standardeingabe (fileno(stdin) oder 0) eine Zeile mit read() in einen
+ Puffer buf, z.B. der Größe 128, ein und schreiben diese Eingabezeile
+ anschliessend auf die Datei. Bei EOF oder der Eingabe der Zeile "eof"
+ wird die Schleife verlassen, die Datei geschlossen und das Programm
+ beendet.
+3. Schreiben Sie ein Programm, in dem Sie eine Pipe mit pipe() anlegen.
+ Dann lesen Sie von der Standardeingaben eine Zeile in einen Puffer buf
+ ein und schreiben diesen Puffer auf die Schreibseite der Pipe.
+ Dann lesen Sie den Puffer von der Leseseite der Pipe ein und geben
+ ihn auf Standardausgabe aus. Bei EOF oder der Eingabe der Zeile "eof"
+ wird die Schleife verlassen und das Programm beendet.
+4. Schreiben Sie ein Programm in dem Sie eine Pipe mit pipe() anlegen.
+ Anschliessend erzeugen Sie mit fork() einen neuen Kindprozess. Im
+ Elternprozess lesen Sie in einer Endlosschleife eine Zeile von der
+ Standardeingabe in einen Puffer ein und schreiben diese Zeile auf
+ die Pipe. Im Kindprozess lesen Sie in einer Endlosschleife die
+ Zeilen von der Pipe und geben sie auf Standardausgabe aus. Bei
+ EOF oder Eingabe der Zeile "eof" im Elternprozess schicken Sie die
+ Eingabe noch an den Kindprozess. Beide Prozesse verlassen dann die
+ Endlosschleife und terminieren.
+
+5. Schreiben Sie ein Programm in dem Sie eine Pipe mit pipe() anlegen.
+ Anschliessend erzeugen Sie mit fork() einen neuen Kindprozess. Im
+ Kindprozess duplizieren Sie die Standardeingabe mit dup2() auf die
+ Leseseite der Pipe, schliessen diese dann mit close() und führen
+ mit execl("/usr/bin/cat", "cat", "-n", NULL) dann das Programm cat -n
+ aus. Im Elterprozess duplizieren Sie die Schreibseite der Pipe auf
+ die Standausgabe, schliessen diese anschliessend und führen mit
+ execl("/usr/bin/ls", "ls", "-l", NULL) dann das Programm ls -l aus.

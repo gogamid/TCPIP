@@ -1,5 +1,5 @@
 #include "c1includes.h"
-#define A 4
+#define A 5
 
 #if A == 1
 int main(int argc, char const *argv[])
