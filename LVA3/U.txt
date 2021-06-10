@@ -14,11 +14,13 @@ Einstieg und einfache TCP-Clients und -Server
  als Parameter (c=zähler) mitschickt. Der Client soll sich 5 mal mit
  dem Server verbinden und nach jeder Verbindung 10 Sekunden warten.
  Der Server-URL ist http://tp.rz.hs-fulda.de/tp-count.php
+ 
 3. Schreiben Sie einen einfachen TCP-Client, der sich mit dem Server
  tp03-server aus der Vorlesung verbindet, auf die Nachricht vom
  Server wartet und diese ausgibt. Übergeben Sie beim Aufruf des
  Clients die IP-Adresse und den Port des Server. Vorher sollten Sie
  das Serverprogramm tp03-server.c compilieren und starten.
+
 4. Schreiben Sie einen TCP-Server, der einen internen Zähler anlegt,
  der bei jeder Clientverbindung inkrementiert wird. Der Server schickt
  einen einfachen Text an den Client zurück, der das aktuelle Datum, die
