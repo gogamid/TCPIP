@@ -1,0 +1,22 @@
+TCPIP-Programmierung SoSe 2021 – Hausaufgabe 1 - Peter Klingebiel
+srsmon – Simple Remote System Monitor
+-------------------------------------------------------------------------
+Entwickeln Sie einen TCP-Server srsmond und einen TCP-Client srsmon zum
+einfachen Monitoring eines entfernten Systems. Auf diesem läuft der
+srsmond, der auf Port 8080/TCP auf Anfragen des Clients srsmon reagiert.
+Das Clientprogramm srsmon wird über die Kommandozeile gesteuert:
+srsmon remotehost command
+Folgende Kommandos command sind zu implementieren:
+users – logged in users (who)
+procs – running processes (ps –ef)
+nets - network information (netstat)
+disks – disk space usage (df –h)
+In Klammern sind beispielhaft die serverseitig für die jeweiligen Kommandos
+aufzurufenden Unix-/Linux-Kommandos aufgeführt. So führt der clientseitige
+Aufruf von "srsmon maya.rz.hs-fulda.de procs" zur Ausführung von "ps –ef"
+auf der Serverseite und dem Senden aller Ausgaben des ps-Kommandos an den
+Client. Es kann sein, dass die Kommandos nicht auf allen Systemen,
+z.B. cygwin, implementiert sind und zur Verfügung stehen. Sie können gern auch
+weitere Kommandos entwerfen und implementieren.
+Stellen Sie weiterhin einige Überlegungen zur Sicherheit des srsmon an.
+Wie könnte die Sicherheit server- und clientseitig verbessert werden? 
