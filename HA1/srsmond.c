@@ -1,3 +1,21 @@
+
+/*
+This is server program. It accepts commands from client 
+and sends result of that command back to client.
+
+Instruction:
+run this in bash before using:
+
+gcc srsmond.c -o srsmond
+sudo cp srsmond /usr/local/bin
+
+Usage:
+srsmond
+
+@gogamid aka Imron Gamidli
+https://github.com/gogamid/TCPIP/tree/main/HA1
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -18,7 +36,6 @@ int main(int argc, char **argv)
     int nbytes, rval, length;
 
     // Server Socket anlegen und oeffnen
-    // Familie: Internet, Typ: TCP-Socket
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd < 0)
     {
@@ -26,11 +43,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // Serverstruktur einrichten
-    // Datenstruktur auf 0 setzen
-    // Familie: Internetserver
-    // Adresse: beliebige Clientadressen zulassen
-    // Port: wie in SERVER_PORT festgelegt
+    //bind
     memset((void *)&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;

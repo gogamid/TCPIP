@@ -1,3 +1,24 @@
+/*
+This is client program. It sends commands to the server and
+waits for response.
+
+INSTRUCTION:
+run this in bash before using:
+
+gcc srsmon.c -o srsmon
+sudo cp srsmon /usr/local/bin
+
+USAGE:
+
+srsmon localhost users
+srsmon localhost procs
+srsmon localhost nets
+srsmon localhost disks
+
+@gogamid aka Imron Gamidli
+https://github.com/gogamid/TCPIP/tree/main/HA1
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
