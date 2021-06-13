@@ -1,8 +1,3 @@
-//
-// tp03-server.c
-// Einfacher TCP-Server, sendet einen String
-// klin, 25.10.2020
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -13,20 +8,18 @@
 
 // Adresse, Port und Request
 #define SERVER_PORT 8080
-#define SERVER_MESSAGE "\n\nHallo Client!\n\n"
 
 // main
 int main(int argc, char **argv)
 {
     int server_fd, client_fd;
     struct sockaddr_in server_addr, client_addr;
-    char buffer[512];
+    char buffer[1000000];
     int nbytes, rval, length;
 
     // Server Socket anlegen und oeffnen
     // Familie: Internet, Typ: TCP-Socket
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    fprintf(stderr, "socket: %d\n", server_fd);
     if (server_fd < 0)
     {
         perror("socket");
@@ -45,54 +38,60 @@ int main(int argc, char **argv)
     bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr));
 
     // Empfangsbereitschaft herstellen und auf Verbindung warten
-    fprintf(stderr, "listen\n");
     listen(server_fd, 5);
 
-////////////////////////////////////////////
-    FILE *fpipe;
-    char *command = "ls";
-    char c = 0;
-    int i = 0;
-    char *res="";
-
-    if (0 == (fpipe = (FILE *)popen(command, "r")))
-    {
-        perror("popen() failed.");
-        exit(EXIT_FAILURE);
-    }
-
-    // while((c = fgetc(fpipe)) != EOF)
-    //     res[i++] = c;
-
-    // while (fread(&c, sizeof c, 1, fpipe))
-    // {
-    //     res[i++] = c;
-    // }
-
-    printf("%s", res);
-    pclose(fpipe);
-    //////////////////////////////////////////
-
+    printf("WAITING FOR A CLIENT\n");
     while (1)
     {
         // Verbindungswunsch annehmen
         length = sizeof(client_addr);
-        fprintf(stderr, "accept ... ");
         client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &length);
-        fprintf(stderr, "\nclient: %d\n", client_fd);
         if (client_fd < 0)
         {
             perror("accept");
             break;
         }
 
+        //lesen vom Client
+        char buf[10];
+        int nb, rv;
+        nb = read(client_fd, buf, sizeof(buf));
+        buf[nb] = '\0';
+
+        ////// get the command result /////
+        FILE *fp = NULL;
+        char path[1035];
+        char message[1000000];
+        int len;
+        char ch;
+
+        /* Open the command for reading. */
+        fp = popen(buf, "r");
+        if (fp == NULL)
+        {
+            printf("Failed to run command\n");
+            exit(1);
+        }
+
+        /* Read the output a line at a time - output it. */
+        while (fgets(path, sizeof(path), fp) != NULL)
+        {
+            strncat(message, path, sizeof(path));
+        }
+        len = strlen(message);
+        message[len] = '\0';
+
+        /* close */
+        pclose(fp);
+        //////////command result saved to message////////
+
         // Nachricht erstellen
-        sprintf(buffer, "%s", res);
+        sprintf(buffer, "%s", message);
+        printf("This massage was sent to the client:\n%s\n", message);
         length = strlen(buffer);
 
         // Nachricht senden
         nbytes = write(client_fd, buffer, length);
-        fprintf(stderr, "write: %s lennnnn: %d\n", buffer, length);
         if (nbytes != length)
         {
             perror("write");
@@ -101,10 +100,9 @@ int main(int argc, char **argv)
 
         // Kurz warten vor dem Schliessen des Socket
         sleep(2);
-
-        // Verbindung zum Client schliessen und Ende
-        fprintf(stderr, "close\n");
         close(client_fd);
+        //clean previous message
+        memset(message, 0, strlen(message));
     }
 
     return 0;
