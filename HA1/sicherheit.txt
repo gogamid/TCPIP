@@ -1,0 +1,2 @@
+Ich würde sagen dass die Kommunikation muss encrypted sein. 
+Sowas kann man erreichen, in dem wir SSL implementiert. 
