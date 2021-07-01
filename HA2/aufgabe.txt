@@ -1,0 +1,28 @@
+TCPIP-Programmierung WS 2020/21 – Hausaufgabe 2 - Peter Klingebiel
+vlftp – Very Lightweighted File Transfer Protocol
+-------------------------------------------------------------------------
+Entwickeln Sie einen TCP-Server vlftpd und einen TCP-Client vlftp zum
+einfachen Dateitransfer von Textdateien zwischem lokalem Rechner und
+entfernten Server. Auf dem Server läuft der vlftpd, der auf Port 8080/TCP
+auf Anfragen des lokalen Clients vlftp reagiert.
+Das Clientprogramm vlftp wird nur über die Kommandozeile gesteuert:
+vlftp server command [argument1 [argument2]]
+Folgende Kommandos command sind zu implementieren:
+pwd - print current working directory
+cd – change directory
+dir – list directory
+get - get (copy) file from server to local host
+put – put (copy) file from local host to server
+Hinweise zu den Kommandos, ihren Parametern und der Realisierung:
+pwd - keine Parameter (popen() oder getcwd())
+cd directory - in das Verzeichnis directory wechseln (chdir())
+dir [files|directory] – Dateien oder Verzeichnisse listen (popen())
+get remotefile [localfile] – Datei remotefile vom Server kopieren,
+entweder auf den lokalen Dateinamen remotefile oder auf den
+lokalen Dateinamen localfile, falls dieser angegeben ist
+put localfile [remotefile] – Datei localfile auf den Server kopieren,
+entweder auf den Dateinamen localfile auf dem Server oder auf
+den Dateinamen remotefile, falls dieser angegeben ist
+Stellen Sie weiterhin einige Überlegungen zur Funktionalität und Sicherheit
+des vlftp an. Wie könnten - oder besser sollten - die Funktionalität und die
+Sicherheit server- und clientseitig verbessert werden? 
