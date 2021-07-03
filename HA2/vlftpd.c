@@ -1,6 +1,17 @@
-// server
-
 /*
+This is server of very lightweight FTP.
+
+Compilation:
+
+gcc vlftpd.c -o vlftpd
+sudo cp vlftpd /usr/local/bin
+
+Run:
+
+vlftpd
+
+@gogamid ->Imron Gamidli
+https://github.com/gogamid/TCPIP/tree/main/HA2
 */
 
 #include <stdio.h>
@@ -21,7 +32,6 @@
 #define SERVER_PORT 8080
 #define CONTENT_BUFFER 1000000
 
-// main
 int main(int argc, char **argv)
 {
     int server_fd, client_fd;
@@ -81,15 +91,18 @@ int main(int argc, char **argv)
             fdr = open(buf + 5, O_RDONLY);
             if (fdr == -1)
             {
-                fprintf(stderr, "file called %s does not exist\n", buf + 5);
-                return 1;
+                sprintf(message, "file called %s does not exist\n", buf + 5);
             }
-            nr = read(fdr, content_buffer, sizeof(content_buffer));
-            sprintf(message, "%s", content_buffer);
+
+            else
+            {
+                nr = read(fdr, content_buffer, sizeof(content_buffer));
+                sprintf(message, "%s", content_buffer);
+            }
         }
         else if (buf[0] == 'c') //put
         {
-            // get the file name
+            // parse the file name
             char str[CONTENT_BUFFER];
             sprintf(str, "%s", buf);
 
@@ -99,7 +112,7 @@ int main(int argc, char **argv)
             char *ptr = strtok(str, delim);
             ptr = strtok(NULL, delim);
 
-            //get the message
+            //parse the message
             sprintf(buf, "%s", buf + (3 + strlen(ptr)));
 
             char fileName[100];
@@ -109,11 +122,10 @@ int main(int argc, char **argv)
             if (fdw == -1)
                 printf("fehler beim oefnen des files");
             nw = write(fdw, buf, nb);
-            sprintf(message,"file is copied from client with name %s\n", fileName);
+            sprintf(message, "file is copied from client with name %s\n", fileName);
         }
         else
         {
-
             /* get the command result */
             FILE *fp = NULL;
             char path[1035];

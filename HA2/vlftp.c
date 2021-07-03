@@ -1,5 +1,34 @@
-// client
 /*
+This is client of very lightweight FTP. 
+
+Commands awailable:
+
+pwd - print current working directory
+cd directory – change directory
+dir [files|directory] – list directory
+get remotefile [localfile] - get (copy) file from server to local host
+put localfile [remotefile] – put (copy) file from local host to server
+
+Compilation:
+
+gcc vlftp.c -o vlftp
+sudo cp vlftp /usr/local/bin
+
+Usage:
+
+vlftp server command [argument1 [argument2]]
+
+Examples:
+
+vlftp localhost pwd
+vlftp localhost dir /home
+vlftp localhost cd ..
+vlftp localhost get aufgabe.txt get.txt
+vlftp localhost put aufgabe.txt put.txt
+
+
+@gogamid ->Imron Gamidli
+https://github.com/gogamid/TCPIP/tree/main/HA2
 
 */
 
