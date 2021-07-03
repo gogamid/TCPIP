@@ -23,8 +23,8 @@ Examples:
 vlftp localhost pwd
 vlftp localhost dir /home
 vlftp localhost cd ..
-vlftp localhost get aufgabe.txt get.txt
-vlftp localhost put aufgabe.txt put.txt
+vlftp localhost get sicherheit.txt get.txt
+vlftp localhost put sicherheit.txt put.txt
 
 
 @gogamid ->Imron Gamidli
