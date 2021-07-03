@@ -11,7 +11,6 @@
 #include <netinet/in.h>
 #include <string.h>
 
-
 #include <netdb.h>
 #include <string.h>
 #include <time.h>
@@ -20,7 +19,6 @@
 
 // Adresse, Port und Request
 #define SERVER_PORT 8080
-#define COMMAND_BUFFER 1000
 #define CONTENT_BUFFER 1000000
 
 // main
@@ -28,7 +26,7 @@ int main(int argc, char **argv)
 {
     int server_fd, client_fd;
     struct sockaddr_in server_addr, client_addr;
-    char buffer[1000000];
+    char buffer[CONTENT_BUFFER];
     int nbytes, rval, length;
 
     // Server Socket anlegen und oeffnen
@@ -62,12 +60,12 @@ int main(int argc, char **argv)
         }
 
         //lesen vom Client
-        char buf[COMMAND_BUFFER];
+        char buf[CONTENT_BUFFER];
         char message[CONTENT_BUFFER];
         int nb, rv;
         nb = read(client_fd, buf, sizeof(buf));
         buf[nb] = '\0';
-        if (buf[0] == 'a')
+        if (buf[0] == 'a') //cd
         {
             /*changing the directory*/
             char s[100];
@@ -76,18 +74,42 @@ int main(int argc, char **argv)
             else
                 sprintf(message, "error changing directory to %s\n", buf + 1);
         }
-        else if (buf[0] == 'b')
+        else if (buf[0] == 'b') //get
         {
             char content_buffer[CONTENT_BUFFER];
             int fdr, nr;
-            fdr = open(buf+5, O_RDONLY);
+            fdr = open(buf + 5, O_RDONLY);
             if (fdr == -1)
             {
-                fprintf(stderr, "file called %s does not exist\n", buf+5);
+                fprintf(stderr, "file called %s does not exist\n", buf + 5);
                 return 1;
             }
-            nr=read(fdr, content_buffer,sizeof(content_buffer));
+            nr = read(fdr, content_buffer, sizeof(content_buffer));
             sprintf(message, "%s", content_buffer);
+        }
+        else if (buf[0] == 'c') //put
+        {
+            // get the file name
+            char str[CONTENT_BUFFER];
+            sprintf(str, "%s", buf);
+
+            int init_size = strlen(str);
+            char delim[] = " ";
+
+            char *ptr = strtok(str, delim);
+            ptr = strtok(NULL, delim);
+
+            //get the message
+            sprintf(buf, "%s", buf + (3 + strlen(ptr)));
+
+            char fileName[100];
+            sprintf(fileName, "%s", ptr);
+            int fdw, nw;
+            fdw = open(fileName, O_WRONLY | O_CREAT, 0644);
+            if (fdw == -1)
+                printf("fehler beim oefnen des files");
+            nw = write(fdw, buf, nb);
+            sprintf(message,"file is copied from client with name %s\n", fileName);
         }
         else
         {

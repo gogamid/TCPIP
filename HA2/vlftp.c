@@ -18,7 +18,6 @@
 
 // Port
 const int srv_port = 8080;
-#define COMMAND_BUFFER 100
 #define CONTENT_BUFFER 1000000
 
 int main(int argc, char const *argv[])
@@ -37,9 +36,9 @@ int main(int argc, char const *argv[])
         return 1;
     }
 
-    char command[COMMAND_BUFFER];
-    char localFileName[COMMAND_BUFFER];
-    int get=0;
+    char command[CONTENT_BUFFER];
+    char localFileName[100];
+    int get = 0;
 
     //pwd
     if (strcmp(argv[2], "pwd") == 0)
@@ -66,7 +65,7 @@ int main(int argc, char const *argv[])
         else
             sprintf(command, "dir");
     }
-    //get TODO
+    //get
     else if (strcmp(argv[2], "get") == 0)
     {
         if (argv[3] == NULL)
@@ -75,13 +74,13 @@ int main(int argc, char const *argv[])
             return 1;
         }
         sprintf(command, "bget %s", argv[3]);
-        get=1;
+        get = 1;
         if (argv[4] != NULL)
             sprintf(localFileName, "%s", argv[4]);
         else
             sprintf(localFileName, "%s", argv[3]);
     }
-    //put TODO
+    //put
     else if (strcmp(argv[2], "put") == 0)
     {
         if (argv[3] == NULL)
@@ -89,6 +88,12 @@ int main(int argc, char const *argv[])
             fprintf(stderr, "put requires localfile name as a parameter\n");
             return 1;
         }
+        char rFilename[100];
+        if (argv[4] != NULL)
+            sprintf(rFilename, "%s", argv[4]);
+        else
+            sprintf(rFilename, "%s", argv[3]);
+
         char content_buffer[CONTENT_BUFFER];
         int fdr, nr;
         fdr = open(argv[3], O_RDONLY);
@@ -97,11 +102,10 @@ int main(int argc, char const *argv[])
             fprintf(stderr, "localfile called %s does not exist\n", argv[3]);
             return 1;
         }
-        // nr=read(fdr, content_buffer,sizeof(content_buffer));
-        if (argv[4] != NULL)
-        {
-            sprintf(command, "put %s %s", argv[3], argv[4]);
-        }
+        nr = read(fdr, content_buffer, sizeof(content_buffer));
+        nr=1+nr+strlen(rFilename);
+        sprintf(command, "c %s %s",rFilename,content_buffer); //to be extracted in server
+       
     }
 
     struct sockaddr_in server_addr; // Serveradresse
@@ -124,7 +128,7 @@ int main(int argc, char const *argv[])
 
     // Request  an Server schicken
     // SERVER_REQUEST ist Formatstring mit Platzhalter fuer Zaehler (s.o.)
-    char buffer[1000];
+    char buffer[CONTENT_BUFFER];
     int nbytes, rval, length;
     sprintf(buffer, "%s", command);
     length = strlen(buffer);
@@ -141,13 +145,18 @@ int main(int argc, char const *argv[])
 
     nb = read(sock_fd, buf, sizeof(buf));
     buf[nb] = '\0';
-    if(get){
-        int fdw,nw;
-        fdw=open(localFileName, O_WRONLY|O_CREAT, 0644);
-        if(fdw==-1) printf("fehler beim oefnen des files");
-        nw=write(fdw,buf, nb);
+    if (get)
+    {
+        int fdw, nw;
+        fdw = open(localFileName, O_WRONLY | O_CREAT, 0644);
+        if (fdw == -1)
+            printf("fehler beim oefnen des files");
+        nw = write(fdw, buf, nb);
         printf("file is copied from server with name %s\n", localFileName);
-    } else fprintf(stderr, "%s", buf);
+        get=0;
+    }
+    else
+        fprintf(stderr, "%s", buf);
 
     // Verbindung und Socket schliessen und kurze Pause
     sleep(1);
