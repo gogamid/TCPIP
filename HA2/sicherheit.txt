@@ -1,0 +1,6 @@
+FTP was not built to be secure. It is generally considered to be an insecure protocol because it relies on clear-text usernames and passwords for authentication and does not use encryption. Data sent via FTP is vulnerable to sniffing, spoofing, and brute force attacks, among other basic attack methods.
+FTP can be improved by using Strong Encryption and Hashing. Others are: 
+*Implement IP Blacklists and Whitelists
+*Utilize Good Account Management
+*Use Strong Passwords
+*Implement File and Folder Security
