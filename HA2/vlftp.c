@@ -43,13 +43,13 @@ int main(int argc, char const *argv[])
     if (strcmp(argv[2], "pwd") == 0){
         strcpy(command, "pwd");
     }
-    // cd   TODO
+    // cd  
     else if (strcmp(argv[2], "cd") == 0){
-        if(argc < 4) {
+        if(argv[3] == NULL) {
             fprintf(stderr, "cd requiers directory parameter\nExample: vlftp localhost cd /home\n");
             return 1;
         }
-        sprintf(command, "cd %s", argv[3]);
+        sprintf(command, "a%s", argv[3]);
     }
     // dir
     else if (strcmp(argv[2], "dir") == 0){

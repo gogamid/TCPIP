@@ -55,40 +55,49 @@ int main(int argc, char **argv)
 
         //lesen vom Client
         char buf[COMMAND_BUFFER];
+        char message[1000000];
         int nb, rv;
         nb = read(client_fd, buf, sizeof(buf));
         buf[nb] = '\0';
-
-        ////// get the command result /////
-        FILE *fp = NULL;
-        char path[1035];
-        char message[1000000];
-        int len;
-        char ch;
-
-        /* Open the command for reading. */
-        fp = popen(buf, "r");
-        if (fp == NULL)
+        if (buf[0] == 'a')
         {
-            printf("Failed to run command\n");
-            exit(1);
+        /*changing the directory*/
+            char s[100];
+            if (chdir(buf + 1) == 0)
+                sprintf(message, "directory changed to %s\n", getcwd(s, 100));
+            else
+                sprintf(message, "error changing directory to %s\n", buf + 1);
+        }
+        else
+        {
+
+            /* get the command result */
+            FILE *fp = NULL;
+            char path[1035];
+
+            /* Open the command for reading. */
+            sprintf(buf, "%s 2>&1", buf); //2>&1 means write stderr (2) to stdout (1) but it doesn't drop stdout
+            fp = popen(buf, "r");
+            if (fp == NULL)
+            {
+                printf("Failed to run command\n");
+                exit(1);
+            }
+
+            /* Read the output a line at a time - output it. */
+            while (fgets(path, sizeof(path), fp) != NULL)
+            {
+                strncat(message, path, sizeof(path));
+            }
+            /* close */
+            pclose(fp);
+            //////////command result saved to message////////
         }
 
-        /* Read the output a line at a time - output it. */
-        while (fgets(path, sizeof(path), fp) != NULL)
-        {
-            strncat(message, path, sizeof(path));
-        }
-        len = strlen(message);
-        message[len] = '\0';
-
-        /* close */
-        pclose(fp);
-        //////////command result saved to message////////
+        message[strlen(message)] = '\0';
 
         // Nachricht erstellen
         sprintf(buffer, "%s", message);
-        printf("This massage was sent to the client:\n%s\n", message);
         length = strlen(buffer);
 
         // Nachricht senden
