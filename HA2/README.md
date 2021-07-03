@@ -1,6 +1,6 @@
 # Hausaufgabe 2 - Very Lightweighted File Transfer Protocol#
 
-[Aufgabe](/aufgabe.txt)
+[Aufgabe](https://github.com/gogamid/TCPIP/blob/main/HA2/aufgabe.txt)
 
  ## SERVER: vlftpd.c
  
