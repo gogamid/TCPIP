@@ -11,9 +11,17 @@
 #include <netinet/in.h>
 #include <string.h>
 
+
+#include <netdb.h>
+#include <string.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 // Adresse, Port und Request
 #define SERVER_PORT 8080
 #define COMMAND_BUFFER 1000
+#define CONTENT_BUFFER 1000000
 
 // main
 int main(int argc, char **argv)
@@ -55,18 +63,31 @@ int main(int argc, char **argv)
 
         //lesen vom Client
         char buf[COMMAND_BUFFER];
-        char message[1000000];
+        char message[CONTENT_BUFFER];
         int nb, rv;
         nb = read(client_fd, buf, sizeof(buf));
         buf[nb] = '\0';
         if (buf[0] == 'a')
         {
-        /*changing the directory*/
+            /*changing the directory*/
             char s[100];
             if (chdir(buf + 1) == 0)
                 sprintf(message, "directory changed to %s\n", getcwd(s, 100));
             else
                 sprintf(message, "error changing directory to %s\n", buf + 1);
+        }
+        else if (buf[0] == 'b')
+        {
+            char content_buffer[CONTENT_BUFFER];
+            int fdr, nr;
+            fdr = open(buf+5, O_RDONLY);
+            if (fdr == -1)
+            {
+                fprintf(stderr, "file called %s does not exist\n", buf+5);
+                return 1;
+            }
+            nr=read(fdr, content_buffer,sizeof(content_buffer));
+            sprintf(message, "%s", content_buffer);
         }
         else
         {

@@ -18,8 +18,8 @@
 
 // Port
 const int srv_port = 8080;
-#define COMMAND_BUFFER 1000
-#define CONTENT_BUFFER 1000
+#define COMMAND_BUFFER 100
+#define CONTENT_BUFFER 1000000
 
 int main(int argc, char const *argv[])
 {
@@ -38,54 +38,69 @@ int main(int argc, char const *argv[])
     }
 
     char command[COMMAND_BUFFER];
+    char localFileName[COMMAND_BUFFER];
+    int get=0;
 
     //pwd
-    if (strcmp(argv[2], "pwd") == 0){
+    if (strcmp(argv[2], "pwd") == 0)
+    {
         strcpy(command, "pwd");
     }
-    // cd  
-    else if (strcmp(argv[2], "cd") == 0){
-        if(argv[3] == NULL) {
+    // cd
+    else if (strcmp(argv[2], "cd") == 0)
+    {
+        if (argv[3] == NULL)
+        {
             fprintf(stderr, "cd requiers directory parameter\nExample: vlftp localhost cd /home\n");
             return 1;
         }
         sprintf(command, "a%s", argv[3]);
     }
     // dir
-    else if (strcmp(argv[2], "dir") == 0){
-        if(argv[3] != NULL) {
+    else if (strcmp(argv[2], "dir") == 0)
+    {
+        if (argv[3] != NULL)
+        {
             sprintf(command, "dir %s", argv[3]);
         }
-        else sprintf(command, "dir");
+        else
+            sprintf(command, "dir");
     }
     //get TODO
-    else if (strcmp(argv[2], "get") == 0){
-        if(argv[3] == NULL) {
+    else if (strcmp(argv[2], "get") == 0)
+    {
+        if (argv[3] == NULL)
+        {
             fprintf(stderr, "get requires remotefile name as a parameter\n");
             return 1;
         }
-        sprintf(command, "get %s", argv[3]);
-        if(argv[4] != NULL) {
-            sprintf(command, "get %s %s",argv[3], argv[4]);
-        }
-        printf("%s", command);
+        sprintf(command, "bget %s", argv[3]);
+        get=1;
+        if (argv[4] != NULL)
+            sprintf(localFileName, "%s", argv[4]);
+        else
+            sprintf(localFileName, "%s", argv[3]);
     }
     //put TODO
-    else if (strcmp(argv[2], "put") == 0){
-        if(argv[3] == NULL) {
+    else if (strcmp(argv[2], "put") == 0)
+    {
+        if (argv[3] == NULL)
+        {
             fprintf(stderr, "put requires localfile name as a parameter\n");
             return 1;
         }
         char content_buffer[CONTENT_BUFFER];
         int fdr, nr;
         fdr = open(argv[3], O_RDONLY);
-        if(fdr==-1) {
+        if (fdr == -1)
+        {
             fprintf(stderr, "localfile called %s does not exist\n", argv[3]);
             return 1;
         }
         // nr=read(fdr, content_buffer,sizeof(content_buffer));
-        if(argv[4] != NULL) {
-            sprintf(command, "put %s %s",argv[3], argv[4]);
+        if (argv[4] != NULL)
+        {
+            sprintf(command, "put %s %s", argv[3], argv[4]);
         }
     }
 
@@ -121,12 +136,18 @@ int main(int argc, char const *argv[])
     }
 
     // String vom Server lesen
-    char buf[COMMAND_BUFFER]; // Lesepuffer
+    char buf[CONTENT_BUFFER]; // Lesepuffer
     int nb;
 
     nb = read(sock_fd, buf, sizeof(buf));
     buf[nb] = '\0';
-    fprintf(stderr, "%s", buf);
+    if(get){
+        int fdw,nw;
+        fdw=open(localFileName, O_WRONLY|O_CREAT, 0644);
+        if(fdw==-1) printf("fehler beim oefnen des files");
+        nw=write(fdw,buf, nb);
+        printf("file is copied from server with name %s\n", localFileName);
+    } else fprintf(stderr, "%s", buf);
 
     // Verbindung und Socket schliessen und kurze Pause
     sleep(1);
