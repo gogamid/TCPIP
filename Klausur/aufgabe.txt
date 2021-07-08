@@ -1,0 +1,61 @@
+TCPIP-Programmierung SoSe 2021 – Klausuraufgabe - Peter Klingebiel
+smb – Simple Message Broker
+-------------------------------------------------------------------------
+Entwickeln Sie einen einfachen Messagebroker smbbroker sowie die beiden
+Dienstprogramme smbpublish und smbsubscribe zur Realisierung einer
+einfachen Nachrichtenvermittler-Architektur. Eine Nachricht besteht
+aus dem Tupel topic (Thema, Betreff) und message (Wert, Inhalt), wobei
+topic und message als einfache Strings zu implementieren sind. Wird der
+Hashtag # als topic verwendet, werden alle Nachrichten vom Broker an den
+Subscriber weitergeleitet. Der Broker speichert die Nachrichten nicht,
+sondern leitet eine Nachricht nur weiter, wenn der topic von einem
+Subscriber abonniert wurde. Die Kommunkation zwischen Broker und Publisher
+bzw. Broker und Subscriber erfolgt mittels UDP.
+Der Broker soll Nachrichten vom Publisher empfangen und an den Subscriber
+weiterleiten. Dazu muss smbbroker ständig im Vorder- oder im Hintergrund
+laufen und soll eingehende Publish- und Subscribeanforderungen auf der
+Konsole ausgeben.
+Der Subscriber wird per Kommandozeile mit dem ihn interessierenden topic
+gestartet und soll ebenfalls in einer Dauerschleife auf Nachrichten vom
+Broker warten und diese dann ausgeben. Der Aufruf des Subscribers:
+ smbsubscribe broker topic
+wobei broker der Hostname oder die IP-Adresse des Brokers ist und topic
+das Thema / den Betreff benennt, den der Subscriber abonniert. Wird der
+Hashtag # als topic angegeben, sollte er in Anführungszeichen gesetzt sein,
+da # Kommentarzeichen der Shell ist. Beispiele:
+ smbsubscribe localhost datum
+ smbsubscribe 192.168.1.13 "#"
+Der Publisher wird per Kommandozeile mit topic und message aufgerufen,
+schickt die Nachricht an den Broker und terminiert dann. Der Aufruf:
+ smbpublish broker topic message
+wobei broker der Hostname oder die IP-Adresse des Brokers ist, topic
+das Thema / den Betreff der Nachricht und message den Wert / den Inhalt
+der Nachricht angibt. Wildcards sind dem Publisher nicht erlaubt.
+Beispiele:
+ smbpublish 127.0.0.1 datum 08.02.2021
+ smbpublish smbserver test "hallo welt!"
+Beachten Sie, dass die drei Programme des SMB kommandozeilenorientiert arbeiten,
+also keinerlei Interaktion mit dem Nutzer zur Laufzeit stattfindet.
+Anforderungen an Ihre Lösung der Klausuraufgabe:
+Erforderlich ist eine kurze, ca. 2-seitige Beschreibung des SMB, in der Sie
+die Funktionsweise, das von Ihnen designte Protokoll und Ihre Implementierung
+der drei Programme beschreiben. Weiterhin ist natürlich auch eine funktionierende
+und gut kommentierte Implementierung von Broker, Subscriber und Publisher
+gefordert.
+Wenn Sie für Ihre Klausuraufgabe in einem Zweierteam arbeiten wollen, müssen
+Sie zu den drei Programmen Broker, Publisher und Subscriber einen weiteren
+Publisher entwickeln, der statt einer einmaligen Nachricht dauerhaft Nachrichten
+an den Broker sendet, z.B. alle 30 Sekunden eine Nachricht. Zum Test könnten Sie
+dies mit einem Zähler oder einer Zeitangabe implementieren. Weiterhin müssen im
+SMB die Hierarchisierung von Nachrichten implementiert werden. Der topic hat dann
+die Form oberthema/thema, z.B. zimmer/temperatur oder zimmer/luftfeuchte. Ein
+Subscriber sollte dann auch passende Wildcards, z.B. zimmer/# subscribieren
+können und somit alle Daten zum oberthema vom Broker erhalten, im Beispiel
+also alle Themen wie temperatur und luftfeuchte.
+Abgabe Ihrer Lösung:
+Bitte stellen Sie Ihre Lösung, also Ausarbeitung/Beschreibung und die Quelltexte
+der Programme wie bei den Hausaufgaben auch auf der Kurseite der LVA bei Moodle
+https://elearning.hs-fulda.de/ai/course/view.php?id=1143 ein. Die Abgabe muss
+wie besprochen bis
+Donnerstag, 15. Juli 2021, 22 Uhr
+erfolgen.
