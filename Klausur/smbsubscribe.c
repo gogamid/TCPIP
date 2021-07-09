@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     // Nachricht an Server schicken
     sprintf(buffer,"s%s", argv[2]);
     length = strlen(buffer);
-    fprintf(stderr, "send to broker: %s\n", buffer);
+      fprintf(stderr, "\nmessage---%s---is sent to broker\n", buffer);
     nbytes = sendto(sock_fd, buffer, length, 0, (struct sockaddr *)&server_addr, server_size);
     if (nbytes != length)
     {
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
         return 1;
       }
       buffer[nbytes] = '\0';
-      fprintf(stderr, "received from broker: %s\n", buffer);
+      fprintf(stderr, "\nmessage---%s---is received from broker\n", buffer);
   }
     return 0;
 }

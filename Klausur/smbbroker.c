@@ -25,8 +25,8 @@ kennt keine topics, kennt nur struktur
 
 struct node
 {
-    int data;
-    char key[20];
+    int data;       //port number
+    char key[20];   //topic name
     struct node *next;
 };
 struct node *head = NULL;
@@ -51,7 +51,6 @@ void insertFirst(char key[20], int data)
 //find a link with given key
 int find(char key[20])
 {
-
     //start from the first link
     struct node *current = head;
 
@@ -81,21 +80,8 @@ int find(char key[20])
     return current->data;
 }
 
-void insertTopic(char *str)
-{
-    printf("Topic-----%s-----is inserted\n", str);
-}
-
-int isTopicExists(char *str)
-{
-    return 1;
-}
-
 // Port
 const int srv_port = 8080;
-
-// Formatstring der Servernachricht
-#define SERVER_MESSAGE "Hallo Client"
 
 // main
 int main(int argc, char **argv)
@@ -109,7 +95,6 @@ int main(int argc, char **argv)
     // Server Socket anlegen und oeffnen
     // Familie: Internet, Typ: UDP-Socket
     server_fd = socket(AF_INET, SOCK_DGRAM, 0);
-    fprintf(stderr, "socket: %d\n", server_fd);
     if (server_fd < 0)
     {
         perror("socket");
@@ -128,18 +113,19 @@ int main(int argc, char **argv)
     server_addr.sin_port = htons(srv_port);
     bind(server_fd, (struct sockaddr *)&server_addr, server_size);
 
+    printf("Broker is waiting for messages....\n");
     // In Endlosschleife auf Nachrichten von Clients warten
     while (1)
     {
-
         // Auf Eingangsnachricht warten und diese lesen
         client_size = sizeof(client_addr);
-        fprintf(stderr, "recvfrom ... ");
         nbytes = recvfrom(server_fd, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, &client_size);
         buffer[nbytes] = '\0';
 
-        //save the port of subscrieber
-        in_port_t portN = client_addr.sin_port;
+        printf("\nmessage---%s---is received from publisher\n", buffer);
+
+        // //save the port of subscrieber
+        // in_port_t portN = client_addr.sin_port;
         if (buffer[0] == 'p')
         {
             sprintf(buffer, "%s", buffer + 1);
@@ -166,7 +152,6 @@ int main(int argc, char **argv)
                 length = strlen(buffer);
                 // Nachricht an Client senden
                 nbytes = sendto(server_fd, buffer, length, 0, (struct sockaddr *)&test_addr, test_size);
-                fprintf(stderr, "sendto: %d Bytes %s\n", nbytes, buffer);
                 if (nbytes != length)
                 {
                     perror("sendto");
@@ -177,7 +162,7 @@ int main(int argc, char **argv)
 
             else
             {
-                printf("\n***Topic does not have a subscriber***\n");
+                printf("\n***Topic %s does not have a subscriber***\n", ptr);
             }
         }
         else if (buffer[0] == 's')
@@ -190,7 +175,7 @@ int main(int argc, char **argv)
             {
                 in_port_t portN = client_addr.sin_port;
                 insertFirst(buffer, portN);
-                printf("\n***Topic is subscribed***\n");
+                printf("\n***Topic %s is subscribed***\n", buffer);
             }
         }
     }
