@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     server_addr.sin_port = htons(srv_port);
 
     // Nachricht an Server schicken
-    sprintf(buffer, SERVER_MESSAGE, getpid());
+    sprintf(buffer,"p %s %s",argv[2], argv[3]);
     length = strlen(buffer);
     fprintf(stderr, "sendto: %d Bytes %s\n", length, buffer);
     nbytes = sendto(sock_fd, buffer, length, 0, (struct sockaddr *)&server_addr, server_size);
@@ -92,16 +92,6 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    //   // Antwort vom Server lesen
-    //   nbytes = recvfrom(sock_fd, buffer, sizeof(buffer) - 1, 0, NULL, NULL);
-    //   if(nbytes < 0) {
-    //     perror("recvfrom");
-    //     return 1;
-    //   }
-    //   buffer[nbytes] = '\0';
-    //   fprintf(stderr, "recvfrom: %d Bytes %s\n", nbytes, buffer);
-
-    // Socket schliessen und Ende
     close(sock_fd);
     return 0;
 }

@@ -30,9 +30,6 @@ Subscriber weitergeleitet
 // Port
 const int srv_port = 8080;
 
-// Formatstring der Nachricht
-#define SERVER_MESSAGE "Hi, hier Client %d"
-
 // main
 int main(int argc, char **argv)
 {
@@ -71,7 +68,6 @@ int main(int argc, char **argv)
     // Serverstruktur einrichten
     // Datenstruktur auf 0 setzen
     // Familie: Internetserver
-    // Adresse: maya.rz.hs-fulda.de
     server_size = sizeof(server_addr);
     memset((void *)&server_addr, 0, server_size);
     server_addr.sin_family = AF_INET;
@@ -79,26 +75,25 @@ int main(int argc, char **argv)
     server_addr.sin_port = htons(srv_port);
 
     // Nachricht an Server schicken
-    sprintf(buffer, SERVER_MESSAGE, getpid());
+    sprintf(buffer,"s%s", argv[2]);
     length = strlen(buffer);
-    fprintf(stderr, "sendto: %d Bytes %s\n", length, buffer);
+    fprintf(stderr, "send to broker: %s\n", buffer);
     nbytes = sendto(sock_fd, buffer, length, 0, (struct sockaddr *)&server_addr, server_size);
     if (nbytes != length)
     {
         perror("sendto");
         return 1;
     }
-
-    //   // Antwort vom Server lesen
-    //   nbytes = recvfrom(sock_fd, buffer, sizeof(buffer) - 1, 0, NULL, NULL);
-    //   if(nbytes < 0) {
-    //     perror("recvfrom");
-    //     return 1;
-    //   }
-    //   buffer[nbytes] = '\0';
-    //   fprintf(stderr, "recvfrom: %d Bytes %s\n", nbytes, buffer);
-
-    // Socket schliessen und Ende
-    close(sock_fd);
+// In Endlosschleife auf Nachrichten von Clients warten  
+  while(1) {
+      // Antwort vom Server lesen
+      nbytes = recvfrom(sock_fd, buffer, sizeof(buffer) - 1, 0, NULL, NULL);
+      if(nbytes < 0) {
+        perror("recvfrom");
+        return 1;
+      }
+      buffer[nbytes] = '\0';
+      fprintf(stderr, "received from broker: %s\n", buffer);
+  }
     return 0;
 }
