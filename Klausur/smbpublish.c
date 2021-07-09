@@ -33,9 +33,6 @@ thrmostat
 // Port
 const int srv_port = 8080;
 
-// Formatstring der Nachricht
-#define SERVER_MESSAGE "Hi, hier Client %d"
-
 // main
 int main(int argc, char **argv)
 {

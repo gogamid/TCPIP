@@ -23,10 +23,19 @@ kennt keine topics, kennt nur struktur
 #include <arpa/inet.h>
 #include <time.h>
 
+#define WILDCARD_ANZAHL 5
+
+int wildcardPorts[WILDCARD_ANZAHL]; //limit to 5 wildcard subscribers
+int count = 0;
+struct sockaddr_in server_addr, client_addr; // Server- und Clientadressen
+int server_fd;                               // Socket
+socklen_t server_size, client_size;          // Adresslaengen
+char buffer[512];                            // Schreib-/Lesepuffer
+int nbytes, length;
 struct node
 {
-    int data;       //port number
-    char key[20];   //topic name
+    int data;     //port number
+    char key[20]; //topic name
     struct node *next;
 };
 struct node *head = NULL;
@@ -83,14 +92,25 @@ int find(char key[20])
 // Port
 const int srv_port = 8080;
 
+void sendToSubscriber(int port)
+{
+    //send to subscriber
+    struct sockaddr_in test_addr;
+    test_addr.sin_family = AF_INET;
+    test_addr.sin_addr = client_addr.sin_addr;
+    test_addr.sin_port = port;
+    socklen_t test_size = sizeof(test_addr);
+
+    // Antwortnachricht erstellen
+    length = strlen(buffer);
+    // Nachricht an Client senden
+    nbytes = sendto(server_fd, buffer, length, 0, (struct sockaddr *)&test_addr, test_size);
+    printf("\nmessage---%s---is sent to subscriber\n", buffer);
+}
+
 // main
 int main(int argc, char **argv)
 {
-    int server_fd;                               // Socket
-    struct sockaddr_in server_addr, client_addr; // Server- und Clientadressen
-    socklen_t server_size, client_size;          // Adresslaengen
-    char buffer[512];                            // Schreib-/Lesepuffer
-    int nbytes, length;
 
     // Server Socket anlegen und oeffnen
     // Familie: Internet, Typ: UDP-Socket
@@ -129,6 +149,13 @@ int main(int argc, char **argv)
         if (buffer[0] == 'p')
         {
             sprintf(buffer, "%s", buffer + 1);
+            
+            //send to wildcard subscribers first if they exist
+            for (size_t i = 0; i < WILDCARD_ANZAHL; i++)
+            {
+                if(wildcardPorts[i]!=0) sendToSubscriber(wildcardPorts[i]);
+            }
+            
 
             //parsing string
             //saving topic to ptr
@@ -141,23 +168,7 @@ int main(int argc, char **argv)
             int port = find(ptr);
             if (port)
             {
-                //send to subscriber
-                struct sockaddr_in test_addr;
-                test_addr.sin_family = AF_INET;
-                test_addr.sin_addr = client_addr.sin_addr;
-                test_addr.sin_port = port;
-                socklen_t test_size = sizeof(test_addr);
-
-                // Antwortnachricht erstellen
-                length = strlen(buffer);
-                // Nachricht an Client senden
-                nbytes = sendto(server_fd, buffer, length, 0, (struct sockaddr *)&test_addr, test_size);
-                if (nbytes != length)
-                {
-                    perror("sendto");
-                    return 1;
-                }
-                printf("\nmessage---%s---is sent to subscriber\n", buffer);
+                sendToSubscriber(port);
             }
 
             else
@@ -168,14 +179,29 @@ int main(int argc, char **argv)
         else if (buffer[0] == 's')
         {
             sprintf(buffer, "%s", buffer + 1);
-            int port = find(buffer);
-            if (port)
-                printf("\n***Topic has already subscriber***\n");
+            if (strcmp(buffer, "#") == 0)
+            {
+                // printf("wildcard subscriber\n");
+                in_port_t portN = client_addr.sin_port;
+                count++;
+                if (count > 4)
+                    printf("***No more than 5 wildcard subscribers allowed, thus not subscribed***\n");
+                else
+                    wildcardPorts[count] = portN;
+            }
             else
             {
-                in_port_t portN = client_addr.sin_port;
-                insertFirst(buffer, portN);
-                printf("\n***Topic %s is subscribed***\n", buffer);
+                int port = find(buffer);
+                if (port)
+                {
+                    printf("\n***Topic has already subscriber***\n");
+                }
+                else
+                {
+                    in_port_t portN = client_addr.sin_port;
+                    insertFirst(buffer, portN);
+                    printf("\n***Topic %s is subscribed***\n", buffer);
+                }
             }
         }
     }
