@@ -1,16 +1,13 @@
 /*
-UDP read write
-Der Broker speichert die Nachrichten nicht,sondern leitet eine Nachricht nur weiter, wenn der topic von einem
-Subscriber abonniert wurde
+This is implimentation of Broker. 
+Broker:
+    mediator of news
+    reads message from publisher
+    manages message
+    sends message to subscriber
 
-Der Broker soll Nachrichten vom Publisher empfangen und an den Subscriber
-weiterleiten. Dazu muss smbbroker ständig im Vorder- oder im Hintergrund
-laufen und soll eingehende Publish- und Subscribeanforderungen auf der
-Konsole ausgeben.
-
-kennt keine topics, kennt nur struktur
-
-
+@gogamid Imron Gamidli 
+https://github.com/gogamid/TCPIP/tree/main/Klausur
 */
 
 #include <stdio.h>
@@ -182,7 +179,6 @@ int main(int argc, char **argv)
             sprintf(buffer, "%s", buffer + 1);
             if (strcmp(buffer, "#") == 0)
             {
-                // printf("wildcard subscriber\n");
                 in_port_t portN = client_addr.sin_port;
                 count++;
                 if (count > 4)

@@ -6,7 +6,11 @@
 * [Structure](#structure)
 * [Environment](#prepare-the-environment)
 * [Usage](#usage)
-## Task 
+* [Broker Implementation](#broker-implementation)
+* [Publisher Implementation](#publisher-implementation)
+* [Subscriber Implementation](#subscriber-implementation)
+
+## Task
 
 This exam project focuses on developing simple message broker architecture. A `message` consists
 the tuple `topic` (subject) and `message` (value, content), where
@@ -136,8 +140,23 @@ smbpublish localhost lamp3 off
 
 As you can see from the result, message is delivered via `Broker` only to `wildcard Subscriber`.
 
-## Broker: smbbroker.c
+## Broker Implementation
 
-## Publisher smbpublish.c
+Broker program is simply implemented. First, socket implementation will be discussed. Then, we will discuss implementation of code when subscriber sends a message. On the other hand, we will go over code when publisher sends a message. Lastly, we will discuss how message is sent to relevant subscriber.
 
-## Subscriber: smbsubscribe.c
+Broker is programmed with the help of socket programming. When program is started, then first thing socket is created. In our case it is AF_INET which specifies that we are using IPv4 Internet-Socket. As a second parameter we use SOCK_DGRAM which basically says that we use UDP. Then, we are binding local address to socket with the help of bind function. Then, in infinite while loop we are waiting for messages from clients(Subscriber or Publisher) and accepting messages with the help of function recvfrom().
+
+When we accept message from client, we have to distinguish which client sent a message to broker. In order to do that, I am introducing a header character which can be either 'p' for Publisher or 's' for Subscriber. This character can be appended when it is sent from source client. For example, when we `smbsubscribe localhost lamp2` in subscriber terminal, then message, which is sent to broker, is actually  `slamp2`. As I mentioned before, 's' stands for subscriber. Therefore, broker first gets first character of the message with `buffer[0]` and checks whether it is `s` or `p`.
+
+In the case of `s`, first broker gets rid of first character with `buffer+1`. Then, we have two types of subscribers: normal subscribers with single topic and wildcard subscribers that receive all messages from broker. First, if it is wildcard subscriber, then we have to check if wildcard subscriber limit is reached. It means, there can not be more than 5 wildcard subscriber. If the limit is not reached, then I need from this subscriber only its `port number` so that i can forward messages later because our environment is LAN. On the other hand, if the message is `topic`, then i am checking whether we have already that topic. If that topic does not have already a subscriber then I am adding `port number` of this client to my linked list with the key being `topic`. My Linked list has two function `insertFirst()` and `find()` that what I exactly need in my program.  First one is used to insert port numbers with topic and other one is to find port numbers with that topic.
+
+In the other case, first character being 'p, we are also getting rid of first character. I could also accomplish this by `buffer+1` as I did in subscriber case. But that approach led me to anomalies, therefore i declared another string and saved there publisher message without the first character. First thing what program does is sending this message to wildcard subscribers. This is easily done with custom function `sendToSubscriber(port)` which requires only `port number` of the client to send the message. So, we got rid of first letter and sent message to wildcard subscribers. Now it is time to discuss about other parts of the message which are `topic` and `value`. So I have to get port number of the client with that topic which is done with `find()` function. It searches for a port number in linked list with the key being topic name. For that we need to parse out the topic. I used `strtok()` for parsing and parsing is defined with `delim[]` which is in my case a whitespace. If topic search from linked list is successful , we will use  custom function to sendToSubscriber(port) which is discussed earlier.
+
+
+
+
+
+
+## Publisher Implimentation
+
+## Subscriber Implimentation
