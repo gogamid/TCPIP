@@ -3,10 +3,10 @@
 ## Task 
 
 This exam project focuses on developing simple message broker architecture. A message consists
-the tuple topic (subject) and message (value, content), where
-topic and message are to be implemented as simple strings. If the
-hashtag # is used as topic, all messages are forwarded from the broker to the
-subscriber. The broker does not store the messages but forwards a message only if the topic has been subscribed to by a subscriber. subscriber has subscribed to it. The communication between broker and publisher or broker and subscriber is done via UDP.
+the tuple `topic` (subject) and `message` (value, content), where
+topic and message are to be implemented as simple `strings`. If the
+hashtag `#` is used as topic, all messages are forwarded from the broker to the
+subscriber. The broker does not store the messages but forwards a message only if the topic has been subscribed to by a subscriber. Subscriber has subscribed to it. The communication between broker and publisher or broker and subscriber is done via  .
 
 ## Structure
 
@@ -61,7 +61,7 @@ smbsubscribe localhost lamp1
 
 Note that, you can have multiple subscribers.
 
-Run this in another terminal to subscribe heater:
+Run this in another terminal to subscribe lamp2:
 
 ```bash
 smbsubscribe localhost lamp2
@@ -108,7 +108,10 @@ Let's try now to turn off lamp3 which does not exist. Run this in `publisher ter
 ```bash
 smbpublish localhost lamp3 off
  ```
+
 ![structure](noSubs.png)
+
+As you can see from the result, message is delivered via `Broker` only to `wildcard Subscriber`.
 
 ## Broker: smbbroker.c
 
