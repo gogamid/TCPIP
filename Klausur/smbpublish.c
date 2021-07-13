@@ -61,7 +61,6 @@ int main(int argc, char **argv)
     // Socket anlegen und oeffnen
     // Familie: Internet, Typ: UDP-Socket
     sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
-    fprintf(stderr, "socket: %d\n", sock_fd);
     if (sock_fd < 0)
     {
         perror("socket");
@@ -79,9 +78,9 @@ int main(int argc, char **argv)
     server_addr.sin_port = htons(srv_port);
 
     // Nachricht an Server schicken
-    sprintf(buffer,"p %s %s",argv[2], argv[3]);
+    sprintf(buffer,"p%s %s",argv[2], argv[3]);
     length = strlen(buffer);
-    fprintf(stderr, "\nmessage---%s---is sent to broker\n", buffer);
+    fprintf(stderr, "\nmessage to broker: %s\n", buffer);
     nbytes = sendto(sock_fd, buffer, length, 0, (struct sockaddr *)&server_addr, server_size);
     if (nbytes != length)
     {
@@ -92,3 +91,13 @@ int main(int argc, char **argv)
     close(sock_fd);
     return 0;
 }
+
+/*
+gcc smbbroker.c -o smbbroker
+sudo cp smbbroker /usr/local/bin
+gcc smbpublish.c -o smbpublish
+sudo cp smbpublish /usr/local/bin
+gcc smbsubscribe.c -o smbsubscribe
+sudo cp smbsubscribe /usr/local/bin
+smbbroker
+*/

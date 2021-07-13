@@ -58,7 +58,6 @@ int main(int argc, char **argv)
     // Socket anlegen und oeffnen
     // Familie: Internet, Typ: UDP-Socket
     sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
-    fprintf(stderr, "socket: %d\n", sock_fd);
     if (sock_fd < 0)
     {
         perror("socket");
@@ -77,7 +76,7 @@ int main(int argc, char **argv)
     // Nachricht an Server schicken
     sprintf(buffer,"s%s", argv[2]);
     length = strlen(buffer);
-      fprintf(stderr, "\nmessage---%s---is sent to broker\n", buffer);
+      fprintf(stderr, "\nmessage to broker: %s \n", buffer);
     nbytes = sendto(sock_fd, buffer, length, 0, (struct sockaddr *)&server_addr, server_size);
     if (nbytes != length)
     {
@@ -93,7 +92,7 @@ int main(int argc, char **argv)
         return 1;
       }
       buffer[nbytes] = '\0';
-      fprintf(stderr, "\nmessage---%s---is received from broker\n", buffer);
+      fprintf(stderr, "\nmessage from broker: %s \n", buffer);
   }
     return 0;
 }

@@ -6,16 +6,112 @@ This exam project focuses on developing simple message broker architecture. A me
 the tuple topic (subject) and message (value, content), where
 topic and message are to be implemented as simple strings. If the
 hashtag # is used as topic, all messages are forwarded from the broker to the
-subscriber. The broker does not store the messages
-but forwards a message only if the topic has been subscribed to by a subscriber.
-subscriber has subscribed to it. The communication between broker and publisher
-or broker and subscriber is done via UDP.
+subscriber. The broker does not store the messages but forwards a message only if the topic has been subscribed to by a subscriber. subscriber has subscribed to it. The communication between broker and publisher or broker and subscriber is done via UDP.
+
+## Structure
+
+![structure](structure.png)
+
+## Prepare the environment
+
+### Compilation smbbroker.c
+
+run this in bash before using:
+
+```bash
+gcc smbbroker.c -o smbbroker
+sudo cp smbbroker /usr/local/bin
+ ```
+
+### Compilation smbpublish.c
+
+run this in bash before using:
+
+```bash
+gcc smbpublish.c -o smbpublish
+sudo cp smbpublish /usr/local/bin
+ ```
+
+### Compilation smbsubscribe.c
+
+run this in bash before using:
+
+```bash
+gcc smbsubscribe.c -o smbsubscribe
+sudo cp smbsubscribe /usr/local/bin
+ ```
+
+## Usage 
+
+Broker should be always up:
+
+Run this:
+
+```bash
+smbbroker
+ ```
+
+Subscriber should have one topic and it should be also up.
+
+Run this in another terminal to subscribe lamp1:
+
+```bash
+smbsubscribe localhost lamp1
+ ```
+
+Note that, you can have multiple subscribers.
+
+Run this in another terminal to subscribe heater:
+
+```bash
+smbsubscribe localhost lamp2
+ ```
+
+Subscriber can also have wildcard. It means it receives all messages from Broker.
+
+Run this in new terminal: 
+
+```bash
+smbsubscribe localhost "#"
+ ```
+
+When subscribers are set, it is expected to have 5 terminal as shown below.
+
+![subs](subscribersAreSet.png)
+
+Now Publisher can send messages to Broker. Let's say we want to turn on lamp1
+
+
+
+Run this in another terminal
+
+```bash
+smbpublish localhost lamp1 on
+ ```
+
+![structure](lamp1.png)
+
+As you can see from the result, message is delivered via `Broker` only to `lamp1 Subscriber` and `wildcard Subscriber`.
+
+Let's now turn off lamp2. Run this in `publisher terminal`:
+
+```bash
+smbpublish localhost lamp2 off
+ ```
+
+![structure](lamp2.png)
+
+As you can see from the result, message is delivered via `Broker` only to `lamp2 Subscriber` and `wildcard Subscriber`.
+
+Let's try now to turn off lamp3 which does not exist. Run this in `publisher terminal`:
+
+```bash
+smbpublish localhost lamp3 off
+ ```
+![structure](noSubs.png)
+
 ## Broker: smbbroker.c
 
-## Publisher smbpublish.c 
+## Publisher smbpublish.c
 
 ## Subscriber: smbsubscribe.c
-
-
-* die Funktionsweise, das von Ihnen designte Protokoll
-* Ihre Implementierung der drei Programme beschreiben.

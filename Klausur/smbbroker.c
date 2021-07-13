@@ -105,7 +105,7 @@ void sendToSubscriber(int port)
     length = strlen(buffer);
     // Nachricht an Client senden
     nbytes = sendto(server_fd, buffer, length, 0, (struct sockaddr *)&test_addr, test_size);
-    printf("\nmessage---%s---is sent to subscriber\n", buffer);
+    printf("\nmessage to subscriber: %s\n", buffer);
 }
 
 // main
@@ -142,13 +142,15 @@ int main(int argc, char **argv)
         nbytes = recvfrom(server_fd, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, &client_size);
         buffer[nbytes] = '\0';
 
-        printf("\nmessage---%s---is received from publisher\n", buffer);
+        printf("\nmessage from publisher: %s\n", buffer);
 
         // //save the port of subscrieber
         // in_port_t portN = client_addr.sin_port;
         if (buffer[0] == 'p')
         {
-            sprintf(buffer, "%s", buffer + 1);
+            char message[512];
+            sprintf(message, "%s", buffer + 1); //removing first letter of message
+            sprintf(buffer, "%s", message);
             
             //send to wildcard subscribers first if they exist
             for (size_t i = 0; i < WILDCARD_ANZAHL; i++)
@@ -163,7 +165,6 @@ int main(int argc, char **argv)
             sprintf(str, "%s", buffer);
             char delim[] = " ";
             char *ptr = strtok(str, delim);
-
             //find topic from list
             int port = find(ptr);
             if (port)
@@ -173,7 +174,7 @@ int main(int argc, char **argv)
 
             else
             {
-                printf("\n***Topic %s does not have a subscriber***\n", ptr);
+                printf("\n***Topic %s does not have a subscriber, it may have wildcard subscriber***\n", ptr);
             }
         }
         else if (buffer[0] == 's')
