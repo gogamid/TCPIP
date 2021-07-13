@@ -12,6 +12,25 @@ hashtag `#` is used as topic, all messages are forwarded from the `broker` to th
 
 ![structure](structure.png)
 
+### Broker
+
+* mediator of news
+* reads message from publisher
+* manages message
+* sends message to subscriber
+
+### Publisher
+
+* creator / sender of message
+* generates data and sends message to Broker
+* message consists of topic and data
+
+### Subscriber
+
+* consumer / receiver of message
+* connects to Broker and subscribes to Topic
+* reads message from broker for further processing
+
 ## Prepare the environment
 
 ### Compilation smbbroker.c
