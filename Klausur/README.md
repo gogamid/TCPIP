@@ -2,11 +2,11 @@
 
 ## Task 
 
-This exam project focuses on developing simple message broker architecture. A message consists
+This exam project focuses on developing simple message broker architecture. A `message` consists
 the tuple `topic` (subject) and `message` (value, content), where
 topic and message are to be implemented as simple `strings`. If the
-hashtag `#` is used as topic, all messages are forwarded from the broker to the
-subscriber. The broker does not store the messages but forwards a message only if the topic has been subscribed to by a subscriber. Subscriber has subscribed to it. The communication between broker and publisher or broker and subscriber is done via  `UDP`.
+hashtag `#` is used as topic, all messages are forwarded from the `broker` to the
+`subscriber`. The broker does not store the messages but forwards a message only if the topic has been subscribed to by a subscriber. Subscriber has subscribed to it. The communication between broker and publisher or broker and subscriber is done via  `UDP`.
 
 ## Structure
 
@@ -51,9 +51,9 @@ Run this:
 smbbroker
  ```
 
-Subscriber should have one topic and it should be also up.
+`Subscriber` should have one topic and it should be also up.
 
-Run this in another terminal to subscribe lamp1:
+Run this in another terminal to `subscribe lamp1`:
 
 ```bash
 smbsubscribe localhost lamp1
@@ -61,15 +61,15 @@ smbsubscribe localhost lamp1
 
 Note that, you can have multiple subscribers.
 
-Run this in another terminal to subscribe lamp2:
+Run this in another terminal to `subscribe lamp2`:
 
 ```bash
 smbsubscribe localhost lamp2
  ```
 
-Subscriber can also have wildcard. It means it receives all messages from Broker.
+`Subscriber` can also have `wildcard`. It means it receives all messages from `Broker`.
 
-Run this in new terminal: 
+Run this in new terminal:
 
 ```bash
 smbsubscribe localhost "#"
@@ -79,9 +79,7 @@ When subscribers are set, it is expected to have 5 terminal as shown below.
 
 ![subs](subscribersAreSet.png)
 
-Now Publisher can send messages to Broker. Let's say we want to turn on lamp1
-
-
+Now `Publisher` can send messages to `Broker`. Let's say we want to turn on lamp1
 
 Run this in another terminal
 
