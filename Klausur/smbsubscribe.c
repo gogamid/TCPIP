@@ -1,20 +1,12 @@
 /*
-UDP read write
-Der Subscriber wird per Kommandozeile mit dem ihn interessierenden topic
-gestartet und soll ebenfalls in einer Dauerschleife auf Nachrichten vom
-Broker warten und diese dann ausgeben
-
-Der Aufruf des Subscribers: smbsubscribe broker topic
-wobei broker der Hostname oder die IP-Adresse des Brokers ist
-und topic das Thema / den Betreff benennt
-
-examples:
-smbsubscribe localhost datum
-smbsubscribe 192.168.1.13 "#"
-
-if topic is # then werden alle Nachrichten vom Broker an den
-Subscriber weitergeleitet
-
+This is the implimentation of Subscriber
+Subscriber:
+    *consumer / receiver of message
+    *connects to Broker and subscribes to Topic
+    *reads message from broker for further processing
+    
+@gogamid Imron Gamidli 
+https://github.com/gogamid/TCPIP/tree/main/Klausur
 */
 
 #include <stdio.h>
@@ -54,7 +46,7 @@ int main(int argc, char **argv)
     }
 
     // 1. Parameter -> IP-Adresse des Server
-    char *server_ip = inet_ntoa(*(struct in_addr *)hostptr->h_addr);// Server IP
+    char *server_ip = inet_ntoa(*(struct in_addr *)hostptr->h_addr); // Server IP
     // Socket anlegen und oeffnen
     // Familie: Internet, Typ: UDP-Socket
     sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -74,25 +66,27 @@ int main(int argc, char **argv)
     server_addr.sin_port = htons(srv_port);
 
     // Nachricht an Server schicken
-    sprintf(buffer,"s%s", argv[2]);
+    sprintf(buffer, "s%s", argv[2]);
     length = strlen(buffer);
-      fprintf(stderr, "\nmessage to broker: %s \n", buffer);
+    fprintf(stderr, "\nmessage to broker: %s \n", buffer);
     nbytes = sendto(sock_fd, buffer, length, 0, (struct sockaddr *)&server_addr, server_size);
     if (nbytes != length)
     {
         perror("sendto");
         return 1;
     }
-// In Endlosschleife auf Nachrichten von Clients warten  
-  while(1) {
-      // Antwort vom Server lesen
-      nbytes = recvfrom(sock_fd, buffer, sizeof(buffer) - 1, 0, NULL, NULL);
-      if(nbytes < 0) {
-        perror("recvfrom");
-        return 1;
-      }
-      buffer[nbytes] = '\0';
-      fprintf(stderr, "\nmessage from broker: %s \n", buffer);
-  }
+    // In Endlosschleife auf Nachrichten vom Broker warten
+    while (1)
+    {
+        // Antwort vom Server lesen
+        nbytes = recvfrom(sock_fd, buffer, sizeof(buffer) - 1, 0, NULL, NULL);
+        if (nbytes < 0)
+        {
+            perror("recvfrom");
+            return 1;
+        }
+        buffer[nbytes] = '\0';
+        fprintf(stderr, "\nmessage from broker: %s \n", buffer);
+    }
     return 0;
 }

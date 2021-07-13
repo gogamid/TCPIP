@@ -153,8 +153,7 @@ int main(int argc, char **argv)
             for (size_t i = 0; i < WILDCARD_ANZAHL; i++)
             {
                 if(wildcardPorts[i]!=0) sendToSubscriber(wildcardPorts[i]);
-            }
-            
+            } 
 
             //parsing string
             //saving topic to ptr
