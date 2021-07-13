@@ -152,11 +152,12 @@ In the case of `s`, first broker gets rid of first character with `buffer+1`. Th
 
 In the other case, first character being 'p, we are also getting rid of first character. I could also accomplish this by `buffer+1` as I did in subscriber case. But that approach led me to anomalies, therefore i declared another string and saved there publisher message without the first character. First thing what program does is sending this message to wildcard subscribers. This is easily done with custom function `sendToSubscriber(port)` which requires only `port number` of the client to send the message. So, we got rid of first letter and sent message to wildcard subscribers. Now it is time to discuss about other parts of the message which are `topic` and `value`. So I have to get port number of the client with that topic which is done with `find()` function. It searches for a port number in linked list with the key being topic name. For that we need to parse out the topic. I used `strtok()` for parsing and parsing is defined with `delim[]` which is in my case a whitespace. If topic search from linked list is successful , we will use  custom function to `sendToSubscriber(port)` which is discussed earlier.
 
+## Publisher Implementation
 
+## Subscriber Implementation
 
+This program subscribes to broker with a topic and waits for messages which are directed to this subscriber. Here is worth of discussion two things. First is sending message to broker and secondly, waiting for message. 
 
+So, this client is also programmed with socket programming. It means, all the steps to create socket are same. What is interesting here is how hostname is translated to IP or vice versa. It is done with function `inet_ntoa()`. This program requires 3 arguments. When it is fulfilled then we can start to sent a message to broker. Message is here is only name of the topic. Additionally, we are going to append 's' letter to the message so that broker will know that this message comes from subscriber. The message is sent with the help of `sendto()` function.
 
-
-## Publisher Implimentation
-
-## Subscriber Implimentation
+Next, program waits for correspondent messages with the help of `recvfrom()` function. When Broker sends a message, subscriber receives the message and saves it to buffer. Then, it outputs that message to the console.
