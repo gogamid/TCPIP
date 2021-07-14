@@ -160,5 +160,7 @@ This program subscribes to broker with a topic and waits for messages which are 
 So, this client is also programmed with socket programming. It means, all the steps to create socket are same. What is interesting here is how hostname is translated to IP or vice versa. It is done with function `inet_ntoa()`. This program requires 3 arguments. When it is fulfilled then we can start to sent a message to broker. Message is here is only name of the topic. Additionally, we are going to append 's' letter to the message so that broker will know that this message comes from subscriber. The message is sent with the help of `sendto()` function.
 
 Next, program waits for correspondent messages with the help of `recvfrom()` function. When Broker sends a message, subscriber receives the message and saves it to buffer. Then, it outputs that message to the console.
+
 ## Publisher Implementation
 
+Task of the Publisher is to send the message to broker with topic and value. Then broker will forward to to the relevant subscriber. Publisher is similar to subscriber but here we don't wait for answers. Publisher can only send message not receive. As usual, we create socket and connect to server port and server address. What is different here is that header character is `p`. Then message contains secons argument which is topic and third argument which is value. 
