@@ -1,5 +1,7 @@
 # TCPIP-Programmierung SoSe 2021 – Klausuraufgabe - smb – Simple Message Broker
 
+Read this file in browser!!! https://github.com/gogamid/TCPIP/tree/main/Klausur
+
 ## Contents
 
 * [Task](#task)
@@ -163,4 +165,4 @@ Next, program waits for correspondent messages with the help of `recvfrom()` fun
 
 ## Publisher Implementation
 
-Task of the Publisher is to send the message to broker with topic and value. Then broker will forward to to the relevant subscriber. Publisher is similar to subscriber but here we don't wait for answers. Publisher can only send message not receive. As usual, we create socket and connect to server port and server address. What is different here is that header character is `p`. Then message contains secons argument which is topic and third argument which is value. 
+Task of the Publisher is to send the message to broker with topic and value. Then broker will forward to to the relevant subscriber. Publisher is similar to subscriber but here we don't wait for answers. Publisher can only send message not receive. As usual, we create socket and connect to server port and server address. What is different here is that header character is `p`. Then message contains secons argument which is topic and third argument which is value.
