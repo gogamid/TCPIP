@@ -1,23 +1,12 @@
 /*
-UDP write
-Nachricht strings: topic (Thema, Betreff) und message (Wert, Inhalt)
+This is implementation of Publisher.
+Publisher:
+    *creator / sender of message
+    *generates data and sends message to Broker
+    *message consists of topic and data
 
-Der Publisher wird per Kommandozeile mit topic und message aufgerufen,
-schickt die Nachricht an den Broker und terminiert dann. 
-
-Der Aufruf: smbpublish broker topic message
-
-* wobei broker der Hostname oder die IP-Adresse des Brokers ist, 
-* topic das Thema / den Betreff der Nachricht und message den Wert / den Inhalt
-der Nachricht angibt.
-* Wildcards sind dem Publisher nicht erlaubt.
-Beispiele:
- smbpublish 127.0.0.1 datum 08.02.2021
- smbpublish smbserver test "hallo welt!"
-
-Topics: 
-date
-thrmostat
+@gogamid Imron Gamidli 
+https://github.com/gogamid/TCPIP/tree/main/Klausur
 */
 
 #include <stdio.h>
@@ -91,13 +80,3 @@ int main(int argc, char **argv)
     close(sock_fd);
     return 0;
 }
-
-/*
-gcc smbbroker.c -o smbbroker
-sudo cp smbbroker /usr/local/bin
-gcc smbpublish.c -o smbpublish
-sudo cp smbpublish /usr/local/bin
-gcc smbsubscribe.c -o smbsubscribe
-sudo cp smbsubscribe /usr/local/bin
-smbbroker
-*/
